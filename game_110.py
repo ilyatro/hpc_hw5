@@ -1,7 +1,16 @@
 import random
+import time
 
 from mpi4py import MPI
 import math
+
+comm = MPI.COMM_WORLD
+n_receivers = comm.Get_size()
+rank = comm.Get_rank()
+cycle = False
+
+if rank == 0:
+    start = time.time()
 
 rule_no = 110
 rule = dict()
@@ -9,14 +18,8 @@ for i in range(8):
     rule[i] = rule_no & 1
     rule_no = rule_no >> 1
 
-
-comm = MPI.COMM_WORLD
-n_receivers = comm.Get_size()
-rank = comm.Get_rank()
-cycle = False
-
 length = 35
-epoch = 40
+epoch = 20
 
 batch_size = math.ceil(length / n_receivers)
 left = batch_size * rank
@@ -78,3 +81,6 @@ for i in range(epoch):
     old = batch[0]
     for j in range(1, len(batch) - 1):
         old, batch[j] = batch[j], rule[old + 2 * batch[j] + 4 * batch[j + 1]]
+
+if rank == 0:
+    print('time = ', time.time() - start)
