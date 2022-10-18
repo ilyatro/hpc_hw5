@@ -1,4 +1,3 @@
-import random
 import time
 import copy
 
@@ -79,10 +78,6 @@ for i in range(epoch):
                 batch[row][col] = 1
             if old[row][col] == 1 and (nb < 2 or nb > 3):
                 batch[row][col] = 0
-
-
-    # for j in range(1, len(batch) - 1):
-    #     old, batch[j] = batch[j], rule[old + 2 * batch[j] + 4 * batch[j + 1]]
 
 if rank == 0:
     print('time = ', time.time() - start)
